@@ -42,6 +42,7 @@
 #include "editor/themes/editor_icons.h"
 #include "editor/themes/editor_scale.h"
 #include "editor/version_control/editor_vcs_interface.h"
+#include "scene/gui/control.h"
 #include "scene/gui/check_box.h"
 #include "scene/gui/check_button.h"
 #include "scene/gui/line_edit.h"
@@ -49,6 +50,7 @@
 #include "scene/gui/option_button.h"
 #include "scene/gui/separator.h"
 #include "scene/gui/texture_rect.h"
+#include "scene/gui/margin_container.h"
 #include "servers/display/display_server.h"
 #include "servers/rendering/rendering_server.h"
 
@@ -1034,7 +1036,7 @@ ProjectDialog::ProjectDialog() {
 
 	project_path_container = memnew(VBoxContainer);
 	vb->add_child(project_path_container);
-
+	
 	HBoxContainer *pphb_label = memnew(HBoxContainer);
 	project_path_container->add_child(pphb_label);
 
@@ -1102,9 +1104,20 @@ ProjectDialog::ProjectDialog() {
 	msg->set_autowrap_mode(TextServer::AUTOWRAP_WORD_SMART);
 	vb->add_child(msg);
 
+	project_start_container = memnew(VBoxContainer);
+	vb->add_child(project_start_container);
+
+	project_start_tab_container = memnew(TabContainer);
+	project_start_tab_container->set_tab_alignment(TabBar::ALIGNMENT_CENTER);
+	project_start_container->add_child(project_start_tab_container);
+
+	default_tab_margin_container = memnew(MarginContainer);
+	default_tab_margin_container->set_custom_minimum_size(Size2(0,192));
+	default_tab_margin_container->set_name(TTRC("Default"));
+	project_start_tab_container->add_child(default_tab_margin_container);
 	// Renderer selection.
 	renderer_container = memnew(VBoxContainer);
-	vb->add_child(renderer_container);
+	default_tab_margin_container->add_child(renderer_container);
 	l = memnew(Label);
 	l->set_text(TTRC("Renderer:"));
 	renderer_container->add_child(l);
@@ -1198,6 +1211,35 @@ ProjectDialog::ProjectDialog() {
 	l->set_modulate(Color(1, 1, 1, 0.7));
 	renderer_container->add_child(l);
 
+	template_tab_margin_container = memnew(MarginContainer);
+	template_tab_margin_container->set_custom_minimum_size(Size2(0,192));
+	template_tab_margin_container->set_name(TTRC("Template"));
+	project_start_tab_container->add_child(template_tab_margin_container);
+	template_tab_container = memnew(VBoxContainer);
+	template_tab_margin_container->add_child(template_tab_container);
+	template_filter_container = memnew(HBoxContainer);
+	template_tab_container->add_child(template_filter_container);
+
+	l = memnew(Label);
+	l->set_text(TTRC("Sort:"));
+	template_filter_container->add_child(l);
+	Control *spacer1 = memnew(Control);
+	spacer1->set_h_size_flags(Control::SIZE_EXPAND_FILL);
+	template_filter_container->add_child(spacer1);
+	template_incompatable_check_button = memnew(CheckButton);
+	template_incompatable_check_button->set_text(TTRC("Show Incompatable Templates"));
+	template_incompatable_check_button->set_pressed(true);
+	template_filter_container->add_child(template_incompatable_check_button);
+	template_tab_container->add_child(memnew(HSeparator));
+
+	template_scroll_container = memnew(ScrollContainer);
+	template_scroll_container->set_v_size_flags(ScrollContainer::SIZE_EXPAND_FILL);
+	template_container = memnew(VBoxContainer);
+	template_scroll_container->add_child(template_container);
+
+	
+
+
 	default_files_container = memnew(HBoxContainer);
 	vb->add_child(default_files_container);
 	l = memnew(Label);
@@ -1210,16 +1252,16 @@ ProjectDialog::ProjectDialog() {
 	vcs_metadata_selection->select((int)EditorVCSInterface::VCSMetadata::GIT);
 	vcs_metadata_selection->set_accessibility_name(TTRC("Version Control Metadata:"));
 	default_files_container->add_child(vcs_metadata_selection);
-	Control *spacer = memnew(Control);
-	spacer->set_h_size_flags(Control::SIZE_EXPAND_FILL);
-	default_files_container->add_child(spacer);
+	Control *spacer2 = memnew(Control);
+	spacer2->set_h_size_flags(Control::SIZE_EXPAND_FILL);
+	default_files_container->add_child(spacer2);
 	fdialog_install = memnew(EditorFileDialog);
 	fdialog_install->set_access(EditorFileDialog::ACCESS_FILESYSTEM);
 	add_child(fdialog_install);
 
-	Control *spacer2 = memnew(Control);
-	spacer2->set_v_size_flags(Control::SIZE_EXPAND_FILL);
-	vb->add_child(spacer2);
+	Control *spacer3 = memnew(Control);
+	spacer3->set_v_size_flags(Control::SIZE_EXPAND_FILL);
+	vb->add_child(spacer3);
 
 	edit_check_box = memnew(CheckBox);
 	edit_check_box->set_text(TTRC("Edit Now"));

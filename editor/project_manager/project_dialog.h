@@ -31,6 +31,9 @@
 #pragma once
 
 #include "scene/gui/dialogs.h"
+#include "scene/gui/tab_container.h"
+#include "scene/gui/margin_container.h"
+#include "scene/gui/control.h"
 
 class Button;
 class CheckBox;
@@ -39,6 +42,8 @@ class EditorFileDialog;
 class LineEdit;
 class OptionButton;
 class TextureRect;
+class ScrollContainer;
+class MarginContainer;
 
 class ProjectDialog : public ConfirmationDialog {
 	GDCLASS(ProjectDialog, ConfirmationDialog);
@@ -72,15 +77,21 @@ private:
 
 	Mode mode = MODE_NEW;
 	bool is_folder_empty = true;
+	bool is_template = false;
 	ConfirmationDialog *nonempty_confirmation = nullptr;
 
 	CheckButton *create_dir = nullptr;
 	Button *project_browse = nullptr;
 	Button *install_browse = nullptr;
+	OptionButton *project_template = nullptr;
 	VBoxContainer *name_container = nullptr;
 	VBoxContainer *project_path_container = nullptr;
 	VBoxContainer *install_path_container = nullptr;
 
+	VBoxContainer *project_start_container = nullptr;
+	TabContainer *project_start_tab_container = nullptr;
+
+	MarginContainer *default_tab_margin_container = nullptr;
 	VBoxContainer *renderer_container = nullptr;
 	Label *renderer_info = nullptr;
 	HBoxContainer *default_files_container = nullptr;
@@ -88,6 +99,15 @@ private:
 	bool rendering_device_supported = false;
 	bool rendering_device_checked = false;
 	Label *rd_not_supported = nullptr;
+
+	MarginContainer *template_tab_margin_container = nullptr;
+	VBoxContainer *template_tab_container = nullptr;
+	HBoxContainer *template_filter_container = nullptr;
+	OptionButton *template_sort_option = nullptr;
+	CheckButton *template_incompatable_check_button = nullptr;
+	ScrollContainer *template_scroll_container = nullptr;
+	VBoxContainer *template_container = nullptr;
+	String template_path;
 
 	Label *msg = nullptr;
 	LineEdit *project_name = nullptr;
